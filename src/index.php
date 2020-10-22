@@ -1,28 +1,3 @@
-<?php
-    // error_reporting();
-    // ini_set('display_errors',1);
-
-    $todoTitle = $_POST['todo-title'] ?? '';
-    $todoTitle = trim($todoTitle);
-
-    if ($todoTitle) {
-        $fileName = __DIR__ . '/' . 'todo-list.json';
-
-        if (file_exists($fileName)) {
-            $json = file_get_contents($fileName);
-            $jsonArray = json_decode($json, true);
-        } else {
-            $jsonArray = [];
-        }
-
-        $jsonArray[$todoTitle] = ['completed' => $_POST['todo-completed'] ? true : false];
-        file_put_contents($fileName, json_encode($jsonArray, JSON_PRETTY_PRINT));
-
-    }
-
-        
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,7 +6,7 @@
     <title>Todo</title>
 </head>
 <body>
-    <form action="" method="post">
+    <form action="storage.php" method="post">
         <fieldset>
             <label for="todo-title">Title</label>
             <input type="text" name="todo-title" id="todo-title">
@@ -45,5 +20,26 @@
             <button type="submit">Save</button>
         </fieldset>
     </form>
+
+    <?php foreach ($jsonArray as $todoTitle => $todo) : ?>
+        <dl>
+        <form action="delete.php" method="post">
+            <input type="hidden" name="todo-id" value=<?=$todo['id']?>/>
+            <dt><?= $todoTitle ?><button type="submit">delete</button></dt>
+        </form>
+        <form action="change-status.php" method="post">
+            <input type="hidden" name="todo-id-completed" value=<?=$todo['id']?>/>
+            <input type="checkbox" name="todo-check" <?= $todo[completed] ? 'checked' : '' ?> />
+        </form>
+        </dl>
+    <?php endforeach; ?>
+    <script>
+    const checkbox = document.querySelectorAll('input[type=checkbox][name=todo-check]');
+    checkbox.forEach(ch => {
+        ch.onclick = function() {
+            this.parentNode.submit();
+        };
+    });
+    </script>
 </body>
 </html>

@@ -1,1 +1,6 @@
-[]
+{
+    "k-update": {
+        "id": 1,
+        "completed": false
+    }
+}

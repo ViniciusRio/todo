@@ -12,4 +12,4 @@ foreach ($todoAssoc as $key => $value) {
 
 file_put_contents('todo-list.json', json_encode($todoAssoc, JSON_PRETTY_PRINT));
 
-header('Location: index.php');
+header('Location: index.view.php');

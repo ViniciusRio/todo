@@ -6,20 +6,17 @@ function dieAndDump($value) {
 
 }
 
-function change_key($array,$old_key,$new_key) {
+function change_key($array,$oldKey,$newKey) {
 
-    if(!array_key_exists($old_key,$array)) {
+    if(!array_key_exists($oldKey,$array)) {
         return $array;
     }
 
     $keys = array_keys($array);
-    $keys[array_search($old_key, $keys)] = $new_key;
+    $keys[array_search($oldKey, $keys)] = $newKey;
 
     return array_combine($keys, $array);
 }
-
-error_reporting();
-ini_set('display_errors',1);
 
     $todoTitle = $_POST['todo-title'] ?? '';
     $todoTitle = trim($todoTitle);
@@ -33,6 +30,8 @@ ini_set('display_errors',1);
         
         foreach ($tasksJsonArray as $title => $value) {
             if ($value['id'] === $todoIdUpdate) {
+
+                $tasksJsonArray[$title]['completed'] = $_POST['todo-completed'] ? true : false;
                 $tasksUpdate = change_key($tasksJsonArray, $title, $todoTitle);
 
                 file_put_contents($fileName, json_encode($tasksUpdate, JSON_PRETTY_PRINT));
@@ -41,9 +40,7 @@ ini_set('display_errors',1);
             
          }
 
-
-        header('Location: index.php');
-
+        header('Location: index.view.php');
 
         return;
 
@@ -64,6 +61,6 @@ ini_set('display_errors',1);
         $jsonArray[$todoTitle] = ['id' => $taskSizePlus, 'completed' => $isCompleted];
         file_put_contents($fileName, json_encode($jsonArray, JSON_PRETTY_PRINT));
 
-        header('Location: index.php');
+        header('Location: index.view.php');
 
     }

@@ -7,13 +7,14 @@
         $classPath = str_replace('\\', DIRECTORY_SEPARATOR, $classPath);
 
         include __DIR__ . '/..' . '/' . $classPath . '.php';
-
     });
 
     defined('DIR_BASE_NAME') || define('DIR_BASE_NAME', dirname(__DIR__));
+
     require DIR_BASE_NAME . '/core/helpers.php';
 
-    use core\{Router, Request};
+    use core\Router;
+    use core\Request;
 
     Router::load(DIR_BASE_NAME . '/app/routes.php')
             ->direct(Request::uri(), Request::method());

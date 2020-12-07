@@ -4,20 +4,29 @@ namespace core;
 
 class Request
 {
-    public static function uri()
+    public static function uri(): string
     {
-        $path = $_SERVER['REQUEST_URI'] ?? '/';
-        $position = strpos($path, '?');
+        $uri = trim(
+            parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH),
+            '/'
+        );
 
-        if ($position === false)
-        {
-            return $path;
+        if (empty($uri)) {
+            return '/';
         }
 
-        return substr($path, 0, $position);
+        return $uri;
     }
 
-    public static function method()
+    public static function params(): array
+    {
+        $urlParams = parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY);
+        parse_str($urlParams, $params);
+
+        return $params;
+    }
+
+    public static function method(): string
     {
         return $_SERVER['REQUEST_METHOD'];
     }
@@ -39,4 +48,8 @@ class Request
         }
     }
 
+    public static function extractFromPost(string $data): ?string
+    {
+        return $_POST[$data] ?? null;
+    }
 }

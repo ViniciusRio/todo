@@ -2,12 +2,15 @@
 
 namespace app\models\todo;
 
+use core\Request;
+
 class Todo
 {
+    private string $todoListFile = DIR_BASE_NAME . '/' . 'todo-list.json';
+
     public function listTodos(): array
     {
-
-        $todoFile = file_get_contents(  DIR_BASE_NAME . '/' . 'todo-list.json');
+        $todoFile = file_get_contents($this->todoListFile);
 
         return json_decode($todoFile, true);
 
@@ -23,7 +26,75 @@ class Todo
 //        }
 //
 //    }
-
     }
 
+    public function saveTodo()
+    {
+        $todoTitle = Request::extractFromPost('todo-title') ?? '';
+        $isCompleted = Request::extractFromPost('todo-completed') ? true : false;
+
+        $todoTitle = trim($todoTitle);
+
+        if (file_exists($this->todoListFile)) {
+            $json = file_get_contents($this->todoListFile);
+            $jsonArray = json_decode($json, true);
+        } else {
+            $jsonArray = [];
+        }
+
+        $taskSizePlus = count($jsonArray) + 1;
+
+        $jsonArray[$todoTitle] = ['id' => $taskSizePlus, 'completed' => $isCompleted];
+
+        file_put_contents($this->todoListFile, json_encode($jsonArray, JSON_PRETTY_PRINT));
+    }
+
+    public function deleteTodo($todoId)
+    {
+        $todoFile = file_get_contents($this->todoListFile);
+        $todoAssoc = json_decode($todoFile, true);
+
+        foreach ($todoAssoc as $key => $value) {
+            if ($value['id'] === $todoId) {
+                unset($todoAssoc[$key]);
+            }
+        }
+
+        file_put_contents($this->todoListFile, json_encode($todoAssoc, JSON_PRETTY_PRINT));
+    }
+
+    public function getTodo($todoId): ?array
+    {
+        $todoContent = file_get_contents($this->todoListFile);
+        $todoDecode = json_decode($todoContent, true);
+
+        foreach ($todoDecode as $title => $value) {
+            if ($value['id'] === intval($todoId)) {
+                $todo = [
+                    'id' => $value['id'],
+                    'title' => $title,
+                    'completed' => $value['completed']
+                ];
+
+                return $todo;
+            }
+        }
+
+        return null;
+    }
+
+    public function update($todoId)
+    {
+        $tasksFile = file_get_contents($this->todoListFile);
+        $tasksJsonArray = json_decode($tasksFile, true);
+
+        foreach ($tasksJsonArray as $title => $value) {
+            if ($value['id'] === $todoId) {
+                $tasksJsonArray[$title]['completed'] = $_POST['todo-completed'] ? true : false;
+                $tasksUpdate = change_key($tasksJsonArray, $title, $$todoId);
+
+                file_put_contents($this->todoListFile, json_encode($tasksUpdate, JSON_PRETTY_PRINT));
+            }
+        }
+    }
 }

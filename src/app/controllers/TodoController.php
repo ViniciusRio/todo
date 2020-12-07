@@ -2,8 +2,8 @@
 
 namespace app\controllers;
 
-use core\Application;
 use app\models\todo\Todo;
+use core\Request;
 
 class TodoController
 {
@@ -19,6 +19,39 @@ class TodoController
         $todos = $this->todo->listTodos();
 
         return view('index', compact('todos', $todos));
+    }
 
+    public function create()
+    {
+        return view('create');
+    }
+
+    public function storage()
+    {
+        $this->todo->saveTodo();
+        $todos = $this->todo->listTodos();
+
+        return view('index', ['flash' => 'New todo created!', 'todos' => $todos]);
+    }
+
+    public function delete()
+    {
+        $todoId = intval(Request::extractFromPost('todo-id'));
+        $this->todo->deleteTodo($todoId);
+
+        $todos = $this->todo->listTodos();
+
+        return view('index', ['flash' => 'Todo deleted!', 'todos' => $todos]);
+    }
+
+    public function edit($params)
+    {
+        $todo = $this->todo->getTodo($params['todo-id']);
+
+        return view('edit', $todo);
+    }
+
+    public function update()
+    {
     }
 }

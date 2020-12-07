@@ -1,15 +1,24 @@
 
-<?php require(DIR_BASE_NAME . '/app/views/partials/head.php'); ?>
+<?php require DIR_BASE_NAME . '/app/views/partials/head.php'; ?>
+
+<a href="create">Create new todo</a>
+<?php if (isset($flash)): ?>
+    <p><?=$flash;?></p>
+<?php endif; ?>
 
 <?php foreach ($todos as $todoTitle => $todo) : ?>
     <dl>
-        <form action="../delete.php" method="post">
-            <input type="hidden" name="todo-id" value=<?=$todo['id']?>/>
+        <form action="delete" method="POST">
+            <input type="hidden" name="todo-id" value=<?=$todo['id']; ?> />
             <button type="submit">delete</button>
         </form>
         <!-- <form action="" method="get"> -->
         <!-- <input type="hidden" name="todo-id-edit"/> -->
-        <a style="text-decoration:none;" href="?todo-id-edit=<?= $todo['id'] ?>"><?= $todoTitle ?></a>
+        <form action="edit" method="GET">
+            <input type="hidden" name="todo-id" value=<?=$todo['id']; ?> />
+            <button type="submit"><?= $todoTitle ?></button>
+            
+        </form>
 
         <!-- </form> -->
         <form action="../change-status.php" method="post">
@@ -33,5 +42,5 @@
     });
 </script>
 
-<?php require(DIR_BASE_NAME . '/app/views/partials/footer.php'); ?>
+<?php require DIR_BASE_NAME . '/app/views/partials/footer.php'; ?>
 

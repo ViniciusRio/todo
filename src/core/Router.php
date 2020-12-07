@@ -28,24 +28,16 @@ class Router
     public function get(string $uri, string $action): void
     {
         $this->routes['GET'][$uri] = $action;
+    }
 
+    public function post(string $uri, string $action): void
+    {
+        $this->routes['POST'][$uri] = $action;
     }
 
     public function direct($uri, $requestType)
     {
-        echo "<pre>";
-            var_dump(
-                trim(
-                    parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH),
-                    '/'
-                )
-            );
-        echo "</pre>";
-
-        exit;
-
         if (array_key_exists($uri, $this->routes[$requestType])) {
-            
             return $this->callAction(
                 ...explode('@', $this->routes[$requestType][$uri])
             );
@@ -56,6 +48,7 @@ class Router
 
     public function callAction($controller, $action)
     {
+        $params = Request::params();
         $controller = "\\app\\controllers\\{$controller}";
         $controller = new $controller();
 
@@ -64,9 +57,10 @@ class Router
                 "{$controller} does not respond to the {$action} action."
             );
         }
+        if (empty($params)) {
+            return $controller->$action();
+        }
 
-        return $controller->$action();
-
+        return $controller->$action($params);
     }
-
 }

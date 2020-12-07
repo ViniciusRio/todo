@@ -1,14 +1,7 @@
 <?php
-function dieAndDump($value) {
-    echo "<pre>";
-            die(var_dump($value));
-    echo "</pre>";
-
-}
-
-function change_key($array,$oldKey,$newKey) {
-
-    if(!array_key_exists($oldKey,$array)) {
+function change_key($array, $oldKey, $newKey)
+{
+    if (!array_key_exists($oldKey, $array)) {
         return $array;
     }
 
@@ -27,31 +20,25 @@ function change_key($array,$oldKey,$newKey) {
     if ($todoIdUpdate) {
         $tasksFile = file_get_contents($fileName);
         $tasksJsonArray = json_decode($tasksFile, true);
-        
+
         foreach ($tasksJsonArray as $title => $value) {
             if ($value['id'] === $todoIdUpdate) {
-
                 $tasksJsonArray[$title]['completed'] = $_POST['todo-completed'] ? true : false;
                 $tasksUpdate = change_key($tasksJsonArray, $title, $todoTitle);
 
                 file_put_contents($fileName, json_encode($tasksUpdate, JSON_PRETTY_PRINT));
-
-              }
-            
-         }
+            }
+        }
 
         header('Location: index.view.php');
 
         return;
-
     }
-    
-    if ($todoTitle) {
 
+    if ($todoTitle) {
         if (file_exists($fileName)) {
             $json = file_get_contents($fileName);
             $jsonArray = json_decode($json, true);
-
         } else {
             $jsonArray = [];
         }
@@ -62,5 +49,4 @@ function change_key($array,$oldKey,$newKey) {
         file_put_contents($fileName, json_encode($jsonArray, JSON_PRETTY_PRINT));
 
         header('Location: index.view.php');
-
     }

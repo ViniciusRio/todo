@@ -53,5 +53,11 @@ class TodoController
 
     public function update()
     {
+        $todoId = Request::extractFromPost('todo-id');
+
+        $this->todo->update($todoId);
+        $todos = $this->todo->listTodos();
+
+        return view('index', ['flash' => 'Todo updated!', 'todos' => $todos]);
     }
 }

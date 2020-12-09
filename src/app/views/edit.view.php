@@ -1,5 +1,6 @@
 <?php require DIR_BASE_NAME . '/app/views/partials/head.php'; ?>
     <form action="update" method="POST">
+        <input type="hidden" name="todo-id" value="<?=$id?>">
         <label for="todo-title">Title</label>
         <input type="text" name="todo-title" value="<?=$title?>"/>
 

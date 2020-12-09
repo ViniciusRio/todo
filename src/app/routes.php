@@ -5,4 +5,5 @@
     $router->get('edit', 'TodoController@edit');
 
     $router->post('storage', 'TodoController@storage');
+    $router->post('update', 'TodoController@update');
     $router->post('delete', 'TodoController@delete');

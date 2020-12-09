@@ -85,16 +85,31 @@ class Todo
 
     public function update($todoId)
     {
-        $tasksFile = file_get_contents($this->todoListFile);
-        $tasksJsonArray = json_decode($tasksFile, true);
+        $todoContent = file_get_contents($this->todoListFile);
+        $todoDecode = json_decode($todoContent, true);
 
-        foreach ($tasksJsonArray as $title => $value) {
-            if ($value['id'] === $todoId) {
-                $tasksJsonArray[$title]['completed'] = $_POST['todo-completed'] ? true : false;
-                $tasksUpdate = change_key($tasksJsonArray, $title, $$todoId);
+        foreach ($todoDecode as $title => $value) {
+            if ($value['id'] === intval($todoId)) {
+                $todoCompleted = Request::extractFromPost('todo-completed');
+                $todoTitle = Request::extractFromPost('todo-title');
+
+                $todoDecode[$title]['completed'] = $todoCompleted ? true : false;
+                $tasksUpdate = $this->change_key($todoDecode, $title, $todoTitle);
 
                 file_put_contents($this->todoListFile, json_encode($tasksUpdate, JSON_PRETTY_PRINT));
             }
         }
+    }
+
+    public function change_key($array, $oldKey, $newKey)
+    {
+        if (!array_key_exists($oldKey, $array)) {
+            return $array;
+        }
+
+        $keys = array_keys($array);
+        $keys[array_search($oldKey, $keys)] = $newKey;
+
+        return array_combine($keys, $array);
     }
 }

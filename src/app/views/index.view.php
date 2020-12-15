@@ -12,17 +12,14 @@
             <input type="hidden" name="todo-id" value=<?=$todo['id']; ?> />
             <button type="submit">delete</button>
         </form>
-        <!-- <form action="" method="get"> -->
-        <!-- <input type="hidden" name="todo-id-edit"/> -->
+
         <form action="edit" method="GET">
             <input type="hidden" name="todo-id" value=<?=$todo['id']; ?> />
             <button type="submit"><?= $todoTitle ?></button>
-            
         </form>
 
-        <!-- </form> -->
-        <form action="../change-status.php" method="post">
-            <input type="hidden" name="todo-id-completed" value=<?=$todo['id']?>/>
+        <form action="status/change" method="post">
+            <input type="hidden" name="todo-id-completed" value=<?=$todo['id']?>>
             <input type="checkbox" name="todo-check" <?= $todo['completed'] ? 'checked' : '' ?> />
         </form>
     </dl>

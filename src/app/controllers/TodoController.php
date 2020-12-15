@@ -60,4 +60,14 @@ class TodoController
 
         return view('index', ['flash' => 'Todo updated!', 'todos' => $todos]);
     }
+
+    public function statusChange()
+    {
+        $todoId = Request::extractFromPost('todo-id-completed');
+        $this->todo->statusChange($todoId);
+
+        $todos = $this->todo->listTodos();
+
+        return view('index', ['flash' => 'Todo updated!', 'todos' => $todos]);
+    }
 }

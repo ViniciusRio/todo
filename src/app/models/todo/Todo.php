@@ -88,15 +88,15 @@ class Todo
         $todoContent = file_get_contents($this->todoListFile);
         $todoDecode = json_decode($todoContent, true);
 
-        foreach ($todoDecode as $title => $value) {
+        foreach ($todoDecode as $oldTitle => $value) {
             if ($value['id'] === intval($todoId)) {
                 $todoCompleted = Request::extractFromPost('todo-completed');
-                $todoTitle = Request::extractFromPost('todo-title');
+                $newTitle = Request::extractFromPost('todo-title');
 
-                $todoDecode[$title]['completed'] = $todoCompleted ? true : false;
-                $tasksUpdate = $this->change_key($todoDecode, $title, $todoTitle);
+                $todoDecode[$oldTitle]['completed'] = $todoCompleted ? true : false;
+                $todoUpdated = $this->change_key($todoDecode, $oldTitle, $newTitle);
 
-                file_put_contents($this->todoListFile, json_encode($tasksUpdate, JSON_PRETTY_PRINT));
+                file_put_contents($this->todoListFile, json_encode($todoUpdated, JSON_PRETTY_PRINT));
             }
         }
     }
@@ -111,5 +111,19 @@ class Todo
         $keys[array_search($oldKey, $keys)] = $newKey;
 
         return array_combine($keys, $array);
+    }
+
+    public function statusChange($todoId)
+    {
+        $todoContent = file_get_contents($this->todoListFile);
+        $todoDecode = json_decode($todoContent, true);
+
+        foreach ($todoDecode as $key => $value) {
+            if ($value['id'] === intval($todoId)) {
+                $todoDecode[$key]['completed'] = !$todoDecode[$key]['completed'];
+            }
+        }
+
+        file_put_contents($this->todoListFile, json_encode($todoDecode, JSON_PRETTY_PRINT));
     }
 }

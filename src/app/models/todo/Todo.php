@@ -3,6 +3,7 @@
 namespace app\models\todo;
 
 use core\Request;
+use Throwable;
 
 class Todo
 {
@@ -13,40 +14,31 @@ class Todo
         $todoFile = file_get_contents($this->todoListFile);
 
         return json_decode($todoFile, true);
-
-        // $todoId = intval($_GET['todo-id-edit']);
-        // $taskTitle = '';
-        // $taskCurrent = '';
-//    if ($taskId) {
-//        foreach ($tasksJson as $key => $value) {
-//            if ($value['id'] === $taskId) {
-//                $taskTitle = $key;
-//                $taskCurrent = $value;
-//            }
-//        }
-//
-//    }
     }
 
-    public function saveTodo()
+    public function saveTodo(): ?int
     {
-        $todoTitle = Request::extractFromPost('todo-title') ?? '';
-        $isCompleted = Request::extractFromPost('todo-completed') ? true : false;
+        try {
+            $todoTitle = Request::extractFromPost('todo-title') ?? '';
+            $isCompleted = Request::extractFromPost('todo-completed') ? true : false;
 
-        $todoTitle = trim($todoTitle);
+            $todoTitle = trim($todoTitle);
 
-        if (file_exists($this->todoListFile)) {
-            $json = file_get_contents($this->todoListFile);
-            $jsonArray = json_decode($json, true);
-        } else {
-            $jsonArray = [];
+            if (file_exists($this->todoListFile)) {
+                $json = file_get_contents($this->todoListFile);
+                $jsonArray = json_decode($json, true);
+            } else {
+                $jsonArray = [];
+            }
+
+            $taskSizePlus = count($jsonArray) + 1;
+
+            $jsonArray[$todoTitle] = ['id' => $taskSizePlus, 'completed' => $isCompleted];
+
+            return file_put_contents($this->todoListFile, json_encode($jsonArray, JSON_PRETTY_PRINT));
+        } catch (Throwable $th) {
+            die(var_dump($th->getMessage()));
         }
-
-        $taskSizePlus = count($jsonArray) + 1;
-
-        $jsonArray[$todoTitle] = ['id' => $taskSizePlus, 'completed' => $isCompleted];
-
-        file_put_contents($this->todoListFile, json_encode($jsonArray, JSON_PRETTY_PRINT));
     }
 
     public function deleteTodo($todoId)

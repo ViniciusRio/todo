@@ -26,12 +26,22 @@ class TodoController
         return view('create');
     }
 
+    public function returnTodos(): array
+    {
+        return $this->todo->listTodos();
+    }
+
     public function storage()
     {
-        $this->todo->saveTodo();
-        $todos = $this->todo->listTodos();
+        if (is_int($this->todo->saveTodo())) {
+            $todos = $this->returnTodos();
 
-        return view('index', ['flash' => 'New todo created!', 'todos' => $todos]);
+            return view('index', ['flash' => 'New todo created!', 'todos' => $todos]);
+        }
+
+        $todos = $this->returnTodos();
+
+        return view('index', ['flash' => 'Todo not created!', 'todos' => $todos]);
     }
 
     public function delete()

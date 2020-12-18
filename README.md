@@ -10,3 +10,5 @@ In order to get back to basics with PHP 7, I am developing a whole app that will
   - Container
   - Login and Logout
   - File upload
+  - CI/CD
+  - Docker

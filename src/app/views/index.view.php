@@ -6,7 +6,8 @@
     <p><?=$flash;?></p>
 <?php endif; ?>
 
-<?php foreach ($todos as $todoTitle => $todo) : ?>
+<?php if (is_array($todos) && !empty($todos)): ?>
+    <?php foreach ($todos as $todoTitle => $todo) : ?>
     <dl>
         <form action="delete" method="POST">
             <input type="hidden" name="todo-id" value=<?=$todo['id']; ?> />
@@ -24,6 +25,13 @@
         </form>
     </dl>
 <?php endforeach; ?>
+<?php elseif (empty($todos)): ?>
+    <p>File empty</p>
+
+<?php else:?>
+    <p><?=$todos;?></p>
+<?php endif; ?>
+
 <script>
     const titleTodo = document.querySelectorAll('dt');
     titleTodo.forEach(title => {

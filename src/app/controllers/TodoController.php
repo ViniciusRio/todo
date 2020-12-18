@@ -17,6 +17,9 @@ class TodoController
     public function index()
     {
         $todos = $this->todo->listTodos();
+        if (is_bool($todos)) {
+            return view('index', ['todos' => 'Is not possibly open file']);
+        }
 
         return view('index', compact('todos', $todos));
     }
@@ -26,7 +29,7 @@ class TodoController
         return view('create');
     }
 
-    public function returnTodos(): array
+    public function returnTodos()
     {
         return $this->todo->listTodos();
     }
@@ -47,16 +50,26 @@ class TodoController
     public function delete()
     {
         $todoId = intval(Request::extractFromPost('todo-id'));
-        $this->todo->deleteTodo($todoId);
+        $todos = '';
 
-        $todos = $this->todo->listTodos();
+        if (is_int($this->todo->deleteTodo($todoId))) {
+            $todos = $this->returnTodos();
 
-        return view('index', ['flash' => 'Todo deleted!', 'todos' => $todos]);
+            return view('index', ['flash' => 'Todo deleted!', 'todos' => $todos]);
+        }
+
+        $todos = $this->returnTodos();
+
+        return view('index', ['flash' => "{$todos}", 'todos' => $todos]);
     }
 
     public function edit($params)
     {
         $todo = $this->todo->getTodo($params['todo-id']);
+        if (is_bool($todo)) {
+            $todos = $this->returnTodos();
+            return view('index', ['flash' => 'Todo not found!', 'todos' => $todos]);
+        }
 
         return view('edit', $todo);
     }
@@ -64,9 +77,15 @@ class TodoController
     public function update()
     {
         $todoId = Request::extractFromPost('todo-id');
+        $todos = '';
 
-        $this->todo->update($todoId);
-        $todos = $this->todo->listTodos();
+        if (is_bool($this->todo->update($todoId))) {
+            $todos = $this->returnTodos();
+
+            return view('index', ['flash' => 'Todo failed!', 'todos' => $todos]);
+        }
+
+        $todos = $this->returnTodos();
 
         return view('index', ['flash' => 'Todo updated!', 'todos' => $todos]);
     }
@@ -74,9 +93,22 @@ class TodoController
     public function statusChange()
     {
         $todoId = Request::extractFromPost('todo-id-completed');
-        $this->todo->statusChange($todoId);
+        $todos = '';
+        $status = $this->todo->statusChange($todoId);
 
-        $todos = $this->todo->listTodos();
+        if (is_bool($status)) {
+            $todos = $this->returnTodos();
+
+            return view('index', ['flash' => 'Status not update!', 'todos' => $todos]);
+        }
+
+        if (is_string($status)) {
+            $todos = $this->returnTodos();
+
+            return view('index', ['flash' => $status, 'todos' => $todos]);
+        }
+
+        $todos = $this->returnTodos();
 
         return view('index', ['flash' => 'Todo updated!', 'todos' => $todos]);
     }

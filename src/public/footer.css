@@ -1,5 +1,5 @@
 .footer-distributed{
-    display: flex;
+	display: flex;
 	width: 100%;
     background-color: #6d6868;
 	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.12);
@@ -38,7 +38,7 @@
 }
 
 .content-footer-center {
-    display: flex;
+	display: flex;
 }
 
 .footer-distributed .footer-center i{
@@ -54,11 +54,8 @@
 }
 
 .footer-distributed .footer-center p{
-    
     font-size: 10px;
-	/* display: inline-block; */
 	color: #ffffff;
-    /* vertical-align: middle; */
     padding-top: 15px;
 	margin:0;
 }
@@ -109,20 +106,25 @@ footer-distributed .footer-right{
 
 @media screen and (max-width: 500px) {
 	
-	.footer-distributed{
+	.footer-distributed {
+		flex-direction: column;
 		font: bold 14px sans-serif;
 	
+	}
+
+	.footer-distributed .footer-center {
+		display: flex;
+		justify-content: center;
+		flex-direction: column;
+		align-items: center;
+
 	}
 
 	.footer-distributed .footer-left,
 	.footer-distributed .footer-center,
 	.footer-distributed .footer-right{
-		display: flex;
-		flex-direction: column;
 		width: 100%;
 		text-align: center;
 	}
 
 }
-
-

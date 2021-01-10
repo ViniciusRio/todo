@@ -1,0 +1,54 @@
+.content {
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+table {
+    margin: 20px 20px;
+	border-collapse: collapse;
+}
+
+table {
+	width: 100%;
+}
+
+th {
+	height: 30px;
+}
+
+th, td {
+	border-bottom: 1px solid black;
+}
+
+tr:hover {
+    background-color: lightgray;
+}
+
+
+
+/* tr:nth-child(even) {
+	background-color: lightgray;
+} */
+
+
+dl form button {
+    background: none;
+	color: inherit;
+	border: none;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+}
+
+#btn-new-todo {
+    position: absolute;
+    display: inline-block;
+    background-color: #157347;
+    color: #ffffff;
+    border-radius: 6px; 
+    padding: 5px;
+    right: 8px;
+    
+
+
+}

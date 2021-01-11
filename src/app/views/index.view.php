@@ -14,8 +14,8 @@
                 <tr>
                     <th>#</th>
                     <th>Description</th>
-                    <th></th>
-                    <th></th>
+                    <th class="th-icon"></th>
+                    <th class="th-icon"></th>
 
 
                 </tr>
@@ -24,12 +24,12 @@
 
                 <?php foreach ($todos as $todoTitle => $todo) : ?>
                     <tr>
-                        <td><?=$todo['id']; ?></td>
-                        <td><?=$todoTitle; ?></td>
+                        <td class="td-click-edit"><?=$todo['id']; ?></td>
+                        <td class="td-click-edit"><?=$todoTitle; ?></td>
                         <td>
                             <form action="delete" method="POST">
                                 <input type="hidden" name="todo-id" value=<?=$todo['id']; ?> />
-                                <button type="submit">
+                                <button class="btn-danger" type="submit">
                                     <i class="fa fa-trash" aria-hidden="true"></i>
                                 </button>
                             </form>
@@ -37,7 +37,7 @@
                         <td>
                             <form action="edit" method="get">
                                 <input type="hidden" name="todo-id" value=<?=$todo['id']; ?> />
-                                <button type="submit">
+                                <button class="btn-edit" type="submit">
                                     <i class="fa fa-pencil" aria-hidden="true"></i>
                                 </button>
                             </form>

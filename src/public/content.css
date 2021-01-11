@@ -9,19 +9,59 @@ table {
 }
 
 table {
-	width: 100%;
+    width: 80%;
+    margin: 0 auto;
+    margin-bottom: 40px;
+    margin-top: 20px;
+
 }
 
 th {
 	height: 30px;
 }
 
+td {
+    margin-top: 10px;
+}
+
 th, td {
 	border-bottom: 1px solid black;
 }
 
+.th-icon {
+    width: 45px;
+}
+
+.td-click-edit {
+    cursor: pointer;
+}
+
+td form button:hover {
+    filter: brightness(130%);
+}
+
 tr:hover {
     background-color: lightgray;
+}
+.btn-danger {
+    cursor: pointer;
+    background-color: red;
+    border: none;
+    border-radius: 6px;
+    padding: 5px;
+
+}
+
+.btn-danger i {
+    color: #ffffff;
+
+}
+.btn-edit {
+    background-color: #e7e7e7; color: black;
+    border: none;
+    border-radius: 6px;
+    padding: 5px;
+    cursor: pointer;
 }
 
 
@@ -31,14 +71,14 @@ tr:hover {
 } */
 
 
-dl form button {
+/* dl form button {
     background: none;
 	color: inherit;
 	border: none;
 	font: inherit;
 	cursor: pointer;
 	outline: inherit;
-}
+} */
 
 #btn-new-todo {
     position: absolute;
@@ -48,7 +88,5 @@ dl form button {
     border-radius: 6px; 
     padding: 5px;
     right: 8px;
-    
-
 
 }

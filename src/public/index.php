@@ -10,7 +10,6 @@
     });
 
     defined('DIR_BASE_NAME') || define('DIR_BASE_NAME', dirname(__DIR__));
-
     require DIR_BASE_NAME . '/core/helpers.php';
 
     use core\Router;

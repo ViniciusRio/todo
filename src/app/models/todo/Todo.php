@@ -8,7 +8,7 @@ use Throwable;
 class Todo
 {
     private string $todoListFile = DIR_BASE_NAME . '/' . 'todo-list.json';
-
+    
     public function listTodos()
     {
         try {
